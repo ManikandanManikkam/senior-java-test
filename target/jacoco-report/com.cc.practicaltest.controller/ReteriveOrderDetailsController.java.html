@@ -23,44 +23,38 @@ import com.cc.practicaltest.service.OrderDetailsService;
 	
 	@Autowired
 	OrderDetailsService orderService;
-	
-	
-	/*
-	 * @Autowired public ReteriveOrderDetailsController(OrderDetailsService
-	 * orderService) { this.orderService=orderService; }
-	 */
 
 	@RequestMapping(value = &quot;/orderdetails/{id}&quot;, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity&lt;CutomerDetail&gt; getOrderDetails(@PathVariable(&quot;id&quot;) long id) {
-<span class="fc" id="L35">		logger.error(&quot;Fetching User with id &quot; + id);</span>
+<span class="fc" id="L29">		logger.error(&quot;Fetching User with id ::: &quot; + id);</span>
 
-<span class="fc" id="L37">		List&lt;OrderDetails&gt; orderList = null;</span>
-<span class="fc" id="L38">		CutomerDetail customerDetailsObj = null;</span>
+<span class="fc" id="L31">		List&lt;OrderDetails&gt; orderList = null;</span>
+<span class="fc" id="L32">		CutomerDetail customerDetailsObj = null;</span>
 		
 		try {
-<span class="fc" id="L41">			customerDetailsObj = orderService.findBycustomerId(id);</span>
-<span class="fc bfc" id="L42" title="All 2 branches covered.">			if (customerDetailsObj != null) {</span>
-<span class="fc" id="L43">				orderList = orderService.findByorderId(id);</span>
-<span class="fc" id="L44">				customerDetailsObj.setOrders(orderList);</span>
+<span class="fc" id="L35">			customerDetailsObj = orderService.findBycustomerId(id);</span>
+<span class="fc bfc" id="L36" title="All 2 branches covered.">			if (customerDetailsObj != null) {</span>
+<span class="fc" id="L37">				orderList = orderService.findByorderId(id);</span>
+<span class="fc" id="L38">				customerDetailsObj.setOrders(orderList);</span>
 			}
-<span class="nc" id="L46">		} catch (Exception exp  ) {</span>
+<span class="fc" id="L40">		} catch (Exception exp  ) {</span>
 			// TODO Auto-generated catch block
-<span class="nc" id="L48">			logger.error(&quot;SQLException occured--&gt;&quot; + exp.getMessage());</span>
-<span class="nc" id="L49">			return new ResponseEntity&lt;CutomerDetail&gt;(customerDetailsObj,HttpStatus.INTERNAL_SERVER_ERROR);</span>
-<span class="fc" id="L50">		} </span>
+<span class="fc" id="L42">			logger.error(&quot;Exception occured :::&quot; + exp.getMessage());</span>
+<span class="fc" id="L43">			return new ResponseEntity&lt;CutomerDetail&gt;(customerDetailsObj,HttpStatus.INTERNAL_SERVER_ERROR);</span>
+<span class="fc" id="L44">		} </span>
 		
-<span class="fc bfc" id="L52" title="All 2 branches covered.">		if (customerDetailsObj == null) {</span>
-<span class="fc" id="L53">			logger.error(&quot;Order with id &quot; + id + &quot; not found&quot;);</span>
-<span class="fc" id="L54">			return new ResponseEntity&lt;CutomerDetail&gt;(customerDetailsObj,HttpStatus.NOT_FOUND);</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">		if (customerDetailsObj == null) {</span>
+<span class="fc" id="L47">			logger.error(&quot;Order with id ::: &quot; + id + &quot; not found&quot;);</span>
+<span class="fc" id="L48">			return new ResponseEntity&lt;CutomerDetail&gt;(customerDetailsObj,HttpStatus.NOT_FOUND);</span>
 		}
-<span class="fc" id="L56">		return new ResponseEntity&lt;CutomerDetail&gt;(customerDetailsObj, HttpStatus.OK);</span>
+<span class="fc" id="L50">		return new ResponseEntity&lt;CutomerDetail&gt;(customerDetailsObj, HttpStatus.OK);</span>
 	}
 	
 	
 	@RequestMapping(value = {&quot;/&quot;,&quot;/orderdetails/&quot;}, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity&lt;String&gt; doHandle() {
-<span class="fc" id="L62">		String error_message= &quot;Requested URL is Not Found&quot;;</span>
-<span class="fc" id="L63">		return new ResponseEntity&lt;String&gt;(error_message, HttpStatus.NOT_FOUND);</span>
+<span class="fc" id="L56">		String error_message= &quot;Requested URL is Not Found&quot;;</span>
+<span class="fc" id="L57">		return new ResponseEntity&lt;String&gt;(error_message, HttpStatus.NOT_FOUND);</span>
 	}
 
 

@@ -23,16 +23,10 @@ public class ReteriveOrderDetailsController {
 	
 	@Autowired
 	OrderDetailsService orderService;
-	
-	
-	/*
-	 * @Autowired public ReteriveOrderDetailsController(OrderDetailsService
-	 * orderService) { this.orderService=orderService; }
-	 */
 
 	@RequestMapping(value = "/orderdetails/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<CutomerDetail> getOrderDetails(@PathVariable("id") long id) {
-		logger.error("Fetching User with id " + id);
+		logger.error("Fetching User with id ::: " + id);
 
 		List<OrderDetails> orderList = null;
 		CutomerDetail customerDetailsObj = null;
@@ -45,12 +39,12 @@ public class ReteriveOrderDetailsController {
 			}
 		} catch (Exception exp  ) {
 			// TODO Auto-generated catch block
-			logger.error("SQLException occured-->" + exp.getMessage());
+			logger.error("Exception occured :::" + exp.getMessage());
 			return new ResponseEntity<CutomerDetail>(customerDetailsObj,HttpStatus.INTERNAL_SERVER_ERROR);
 		} 
 		
 		if (customerDetailsObj == null) {
-			logger.error("Order with id " + id + " not found");
+			logger.error("Order with id ::: " + id + " not found");
 			return new ResponseEntity<CutomerDetail>(customerDetailsObj,HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<CutomerDetail>(customerDetailsObj, HttpStatus.OK);

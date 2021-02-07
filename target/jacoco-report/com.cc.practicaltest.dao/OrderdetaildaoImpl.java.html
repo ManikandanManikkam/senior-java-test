@@ -73,55 +73,58 @@ public class OrderdetaildaoImpl extends JdbcDaoSupport implements Orderdetaildao
 
 	}
 
-	private RowMapper&lt;OrderDetails&gt; rowmapperOrderDetails() {
-<span class="fc" id="L77">		RowMapper&lt;OrderDetails&gt; rowMapper = (rs, rowNum) -&gt; {</span>
-<span class="fc" id="L78">			OrderDetails data = new OrderDetails();</span>
-<span class="fc" id="L79">			data.setActual_delivery_type(rs.getString(&quot;actual_delivery_date&quot;));</span>
-<span class="fc" id="L80">			data.setEmployee_number(rs.getInt(&quot;employee_number&quot;));</span>
-<span class="fc" id="L81">			data.setExpected_delivery_type(rs.getString(&quot;expected_delivery_date&quot;));</span>
-<span class="fc" id="L82">			data.setDeposit(rs.getString(&quot;deposit&quot;));</span>
-<span class="fc" id="L83">			data.setSale_price(rs.getString(&quot;sale_price&quot;));</span>
-<span class="fc" id="L84">			data.setVechile_no(rs.getLong(&quot;vehicle_number&quot;));</span>
-<span class="fc" id="L85">			data.setModel_name(rs.getString(&quot;model_name&quot;));</span>
-<span class="fc" id="L86">			data.setEngine_model(rs.getString(&quot;engine_designation&quot;));</span>
-<span class="fc" id="L87">			data.setTrim_name(rs.getString(&quot;trim_name&quot;));</span>
-<span class="fc" id="L88">			data.setOrder_no(rs.getInt(&quot;order_number&quot;));</span>
-<span class="fc" id="L89">			data.setOrder_date(rs.getString(&quot;order_date&quot;));</span>
-<span class="fc" id="L90">			data.setVechileColour(rs.getString(&quot;colour&quot;));</span>
-<span class="fc" id="L91">			data.setEngine_capacity(rs.getString(&quot;capacity&quot;));</span>
-<span class="fc" id="L92">			data.setVechile_fuelType(rs.getString(&quot;fuel_type&quot;));</span>
-<span class="fc" id="L93">			return data;</span>
-		};
-<span class="fc" id="L95">		return rowMapper;</span>
-	}
-
+	
 	@Override
 	public List&lt;TrimAddonDetails&gt; getTrimAddDetail() throws SQLException {
-<span class="fc" id="L100">		List&lt;TrimAddonDetails&gt; trimAddonDetailsList = new ArrayList&lt;TrimAddonDetails&gt;();</span>
-<span class="fc" id="L101">		String order_query = SQLConstant.TRIM_DETAILS_QUERY;</span>
-<span class="fc" id="L102">		RowMapper&lt;TrimAddonDetails&gt; rowMapper = rowmapperTrimDetails();</span>
-<span class="fc" id="L103">		JdbcTemplate jdbcTemplate = getJdbcTemplate();</span>
-<span class="pc bpc" id="L104" title="1 of 2 branches missed.">		if (jdbcTemplate != null) {</span>
-<span class="fc" id="L105">			trimAddonDetailsList = jdbcTemplate.query(order_query, rowMapper);</span>
+<span class="fc" id="L79">		List&lt;TrimAddonDetails&gt; trimAddonDetailsList = new ArrayList&lt;TrimAddonDetails&gt;();</span>
+<span class="fc" id="L80">		String order_query = SQLConstant.TRIM_DETAILS_QUERY;</span>
+<span class="fc" id="L81">		RowMapper&lt;TrimAddonDetails&gt; rowMapper = rowmapperTrimDetails();</span>
+<span class="fc" id="L82">		JdbcTemplate jdbcTemplate = getJdbcTemplate();</span>
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">		if (jdbcTemplate != null) {</span>
+<span class="fc" id="L84">			trimAddonDetailsList = jdbcTemplate.query(order_query, rowMapper);</span>
 		}
 
-<span class="fc" id="L108">		return trimAddonDetailsList;</span>
+<span class="fc" id="L87">		return trimAddonDetailsList;</span>
 
 	}
+	
+	
+	private RowMapper&lt;OrderDetails&gt; rowmapperOrderDetails() {
+<span class="fc" id="L93">		RowMapper&lt;OrderDetails&gt; rowMapper = (rs, rowNum) -&gt; {</span>
+<span class="fc" id="L94">			OrderDetails data = new OrderDetails();</span>
+<span class="fc" id="L95">			data.setActual_delivery_type(rs.getString(&quot;actual_delivery_date&quot;));</span>
+<span class="fc" id="L96">			data.setEmployee_number(rs.getInt(&quot;employee_number&quot;));</span>
+<span class="fc" id="L97">			data.setExpected_delivery_type(rs.getString(&quot;expected_delivery_date&quot;));</span>
+<span class="fc" id="L98">			data.setDeposit(rs.getString(&quot;deposit&quot;));</span>
+<span class="fc" id="L99">			data.setSale_price(rs.getString(&quot;sale_price&quot;));</span>
+<span class="fc" id="L100">			data.setVechile_no(rs.getLong(&quot;vehicle_number&quot;));</span>
+<span class="fc" id="L101">			data.setModel_name(rs.getString(&quot;model_name&quot;));</span>
+<span class="fc" id="L102">			data.setEngine_model(rs.getString(&quot;engine_designation&quot;));</span>
+<span class="fc" id="L103">			data.setTrim_name(rs.getString(&quot;trim_name&quot;));</span>
+<span class="fc" id="L104">			data.setOrder_no(rs.getInt(&quot;order_number&quot;));</span>
+<span class="fc" id="L105">			data.setOrder_date(rs.getString(&quot;order_date&quot;));</span>
+<span class="fc" id="L106">			data.setVechileColour(rs.getString(&quot;colour&quot;));</span>
+<span class="fc" id="L107">			data.setEngine_capacity(rs.getString(&quot;capacity&quot;));</span>
+<span class="fc" id="L108">			data.setVechile_fuelType(rs.getString(&quot;fuel_type&quot;));</span>
+<span class="fc" id="L109">			return data;</span>
+		};
+<span class="fc" id="L111">		return rowMapper;</span>
+	}
+
 
 	private RowMapper&lt;TrimAddonDetails&gt; rowmapperTrimDetails() {
-<span class="fc" id="L113">		RowMapper&lt;TrimAddonDetails&gt; rowMapper = (rs, rowNum) -&gt; {</span>
-<span class="fc" id="L114">			TrimAddonDetails data = new TrimAddonDetails();</span>
-<span class="fc" id="L115">			data.setEffective_date(rs.getDate(&quot;effective_date&quot;));</span>
-<span class="fc" id="L116">			data.setInfotainment_type(rs.getString(&quot;infotainment_type&quot;));</span>
-<span class="fc" id="L117">			data.setUpholstery_type(rs.getString(&quot;upholstery_type&quot;));</span>
-<span class="fc" id="L118">			data.setWheel_type(rs.getString(&quot;wheel_type&quot;));</span>
-<span class="fc" id="L119">			data.setTrim_name(rs.getString(&quot;trim_name&quot;));</span>
-<span class="fc" id="L120">			data.setHeadlight_type(rs.getString(&quot;headlight_type&quot;));</span>
-<span class="fc" id="L121">			return data;</span>
+<span class="fc" id="L116">		RowMapper&lt;TrimAddonDetails&gt; rowMapper = (rs, rowNum) -&gt; {</span>
+<span class="fc" id="L117">			TrimAddonDetails data = new TrimAddonDetails();</span>
+<span class="fc" id="L118">			data.setEffective_date(rs.getDate(&quot;effective_date&quot;));</span>
+<span class="fc" id="L119">			data.setInfotainment_type(rs.getString(&quot;infotainment_type&quot;));</span>
+<span class="fc" id="L120">			data.setUpholstery_type(rs.getString(&quot;upholstery_type&quot;));</span>
+<span class="fc" id="L121">			data.setWheel_type(rs.getString(&quot;wheel_type&quot;));</span>
+<span class="fc" id="L122">			data.setTrim_name(rs.getString(&quot;trim_name&quot;));</span>
+<span class="fc" id="L123">			data.setHeadlight_type(rs.getString(&quot;headlight_type&quot;));</span>
+<span class="fc" id="L124">			return data;</span>
 
 		};
-<span class="fc" id="L124">		return rowMapper;</span>
+<span class="fc" id="L127">		return rowMapper;</span>
 	}
 
 }

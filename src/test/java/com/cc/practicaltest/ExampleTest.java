@@ -95,6 +95,14 @@ public class ExampleTest {
         
     }
     
+    @Test
+    public void TestCasegetOrderCheckExpection() throws SQLException {
+         Mockito.when(orderService.findBycustomerId(153)).thenThrow(SQLException.class);
+       	 ResponseEntity<CutomerDetail> responseEntity = orderController.getOrderDetails(153);
+    	 Assert.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR,responseEntity.getStatusCode());
+    	 
+      }
+    
     
     
   

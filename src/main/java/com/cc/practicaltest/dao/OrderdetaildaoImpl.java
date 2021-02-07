@@ -73,6 +73,22 @@ public class OrderdetaildaoImpl extends JdbcDaoSupport implements Orderdetaildao
 
 	}
 
+	
+	@Override
+	public List<TrimAddonDetails> getTrimAddDetail() throws SQLException {
+		List<TrimAddonDetails> trimAddonDetailsList = new ArrayList<TrimAddonDetails>();
+		String order_query = SQLConstant.TRIM_DETAILS_QUERY;
+		RowMapper<TrimAddonDetails> rowMapper = rowmapperTrimDetails();
+		JdbcTemplate jdbcTemplate = getJdbcTemplate();
+		if (jdbcTemplate != null) {
+			trimAddonDetailsList = jdbcTemplate.query(order_query, rowMapper);
+		}
+
+		return trimAddonDetailsList;
+
+	}
+	
+	
 	private RowMapper<OrderDetails> rowmapperOrderDetails() {
 		RowMapper<OrderDetails> rowMapper = (rs, rowNum) -> {
 			OrderDetails data = new OrderDetails();
@@ -95,19 +111,6 @@ public class OrderdetaildaoImpl extends JdbcDaoSupport implements Orderdetaildao
 		return rowMapper;
 	}
 
-	@Override
-	public List<TrimAddonDetails> getTrimAddDetail() throws SQLException {
-		List<TrimAddonDetails> trimAddonDetailsList = new ArrayList<TrimAddonDetails>();
-		String order_query = SQLConstant.TRIM_DETAILS_QUERY;
-		RowMapper<TrimAddonDetails> rowMapper = rowmapperTrimDetails();
-		JdbcTemplate jdbcTemplate = getJdbcTemplate();
-		if (jdbcTemplate != null) {
-			trimAddonDetailsList = jdbcTemplate.query(order_query, rowMapper);
-		}
-
-		return trimAddonDetailsList;
-
-	}
 
 	private RowMapper<TrimAddonDetails> rowmapperTrimDetails() {
 		RowMapper<TrimAddonDetails> rowMapper = (rs, rowNum) -> {
