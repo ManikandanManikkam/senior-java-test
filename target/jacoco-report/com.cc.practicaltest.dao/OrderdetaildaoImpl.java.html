@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OrderdetaildaoImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Senior Java Test Template Project</a> &gt; <a href="index.source.html" class="el_package">com.cc.practicaltest.dao</a> &gt; <span class="el_source">OrderdetaildaoImpl.java</span></div><h1>OrderdetaildaoImpl.java</h1><pre class="source lang-java linenums">package com.cc.practicaltest.dao;
+
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementSetter;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.support.JdbcDaoSupport;
+import org.springframework.stereotype.Repository;
+
+import com.cc.practicaltest.contstant.SQLConstant;
+import com.cc.practicaltest.model.CutomerDetail;
+import com.cc.practicaltest.model.OrderDetails;
+import com.cc.practicaltest.model.TrimAddonDetails;
+
+@Repository(&quot;Orderdetaildao&quot;)
+public class OrderdetaildaoImpl extends JdbcDaoSupport implements Orderdetaildao {
+
+	@Autowired
+<span class="fc" id="L26">	public OrderdetaildaoImpl(DataSource dataSource) {</span>
+<span class="fc" id="L27">		this.setDataSource(dataSource);</span>
+<span class="fc" id="L28">	}</span>
+
+	@Override
+	public CutomerDetail getCustomerDetails(long custId) throws SQLException {
+<span class="fc" id="L32">		CutomerDetail cutomerDetailObj = null;</span>
+<span class="fc" id="L33">		String queryString = SQLConstant.CUSTOMER_DETAILS_QUERY;</span>
+<span class="fc" id="L34">		RowMapper&lt;CutomerDetail&gt; rowMapper = rowmapperCustomerDetails();</span>
+<span class="fc" id="L35">		JdbcTemplate jdbcTemplate = getJdbcTemplate();</span>
+<span class="pc bpc" id="L36" title="1 of 2 branches missed.">		if (jdbcTemplate != null) {</span>
+<span class="fc" id="L37">			cutomerDetailObj = jdbcTemplate.queryForObject(queryString, new Object[] { custId }, rowMapper);</span>
+		}
+<span class="fc" id="L39">		return cutomerDetailObj;</span>
+
+	}
+
+	private RowMapper&lt;CutomerDetail&gt; rowmapperCustomerDetails() {
+<span class="fc" id="L44">		RowMapper&lt;CutomerDetail&gt; rowMapper = (rs, rowNum) -&gt; {</span>
+<span class="fc" id="L45">			CutomerDetail data = new CutomerDetail();</span>
+<span class="fc" id="L46">			data.setCustomer_no(rs.getInt(&quot;customer_number&quot;));</span>
+<span class="fc" id="L47">			data.setForename(rs.getString(&quot;forename&quot;));</span>
+<span class="fc" id="L48">			data.setSurname(rs.getString(&quot;surname&quot;));</span>
+<span class="fc" id="L49">			return data;</span>
+		};
+<span class="fc" id="L51">		return rowMapper;</span>
+	}
+
+	@Override
+	public List&lt;OrderDetails&gt; getOrderDetails(long custId) throws SQLException {
+
+<span class="fc" id="L57">		String order_query = String.valueOf(SQLConstant.ORDER_DETAILS_QUERY);</span>
+<span class="fc" id="L58">		List&lt;OrderDetails&gt; orderDetailList = new ArrayList&lt;OrderDetails&gt;();</span>
+
+<span class="fc" id="L60">		RowMapper&lt;OrderDetails&gt; rowMapper = rowmapperOrderDetails();</span>
+
+<span class="fc" id="L62">		PreparedStatementSetter obj = new PreparedStatementSetter() {</span>
+			public void setValues(PreparedStatement preparedStatement) throws SQLException {
+<span class="fc" id="L64">				preparedStatement.setLong(1, custId);</span>
+<span class="fc" id="L65">			}</span>
+		};
+
+<span class="fc" id="L68">		JdbcTemplate jdbcTemplate = getJdbcTemplate();</span>
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">		if (jdbcTemplate != null) {</span>
+<span class="fc" id="L70">			orderDetailList = jdbcTemplate.query(order_query, obj, rowMapper);</span>
+		}
+<span class="fc" id="L72">		return orderDetailList;</span>
+
+	}
+
+	private RowMapper&lt;OrderDetails&gt; rowmapperOrderDetails() {
+<span class="fc" id="L77">		RowMapper&lt;OrderDetails&gt; rowMapper = (rs, rowNum) -&gt; {</span>
+<span class="fc" id="L78">			OrderDetails data = new OrderDetails();</span>
+<span class="fc" id="L79">			data.setActual_delivery_type(rs.getString(&quot;actual_delivery_date&quot;));</span>
+<span class="fc" id="L80">			data.setEmployee_number(rs.getInt(&quot;employee_number&quot;));</span>
+<span class="fc" id="L81">			data.setExpected_delivery_type(rs.getString(&quot;expected_delivery_date&quot;));</span>
+<span class="fc" id="L82">			data.setDeposit(rs.getString(&quot;deposit&quot;));</span>
+<span class="fc" id="L83">			data.setSale_price(rs.getString(&quot;sale_price&quot;));</span>
+<span class="fc" id="L84">			data.setVechile_no(rs.getLong(&quot;vehicle_number&quot;));</span>
+<span class="fc" id="L85">			data.setModel_name(rs.getString(&quot;model_name&quot;));</span>
+<span class="fc" id="L86">			data.setEngine_model(rs.getString(&quot;engine_designation&quot;));</span>
+<span class="fc" id="L87">			data.setTrim_name(rs.getString(&quot;trim_name&quot;));</span>
+<span class="fc" id="L88">			data.setOrder_no(rs.getInt(&quot;order_number&quot;));</span>
+<span class="fc" id="L89">			data.setOrder_date(rs.getString(&quot;order_date&quot;));</span>
+<span class="fc" id="L90">			data.setVechileColour(rs.getString(&quot;colour&quot;));</span>
+<span class="fc" id="L91">			data.setEngine_capacity(rs.getString(&quot;capacity&quot;));</span>
+<span class="fc" id="L92">			data.setVechile_fuelType(rs.getString(&quot;fuel_type&quot;));</span>
+<span class="fc" id="L93">			return data;</span>
+		};
+<span class="fc" id="L95">		return rowMapper;</span>
+	}
+
+	@Override
+	public List&lt;TrimAddonDetails&gt; getTrimAddDetail() throws SQLException {
+<span class="fc" id="L100">		List&lt;TrimAddonDetails&gt; trimAddonDetailsList = new ArrayList&lt;TrimAddonDetails&gt;();</span>
+<span class="fc" id="L101">		String order_query = SQLConstant.TRIM_DETAILS_QUERY;</span>
+<span class="fc" id="L102">		RowMapper&lt;TrimAddonDetails&gt; rowMapper = rowmapperTrimDetails();</span>
+<span class="fc" id="L103">		JdbcTemplate jdbcTemplate = getJdbcTemplate();</span>
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">		if (jdbcTemplate != null) {</span>
+<span class="fc" id="L105">			trimAddonDetailsList = jdbcTemplate.query(order_query, rowMapper);</span>
+		}
+
+<span class="fc" id="L108">		return trimAddonDetailsList;</span>
+
+	}
+
+	private RowMapper&lt;TrimAddonDetails&gt; rowmapperTrimDetails() {
+<span class="fc" id="L113">		RowMapper&lt;TrimAddonDetails&gt; rowMapper = (rs, rowNum) -&gt; {</span>
+<span class="fc" id="L114">			TrimAddonDetails data = new TrimAddonDetails();</span>
+<span class="fc" id="L115">			data.setEffective_date(rs.getDate(&quot;effective_date&quot;));</span>
+<span class="fc" id="L116">			data.setInfotainment_type(rs.getString(&quot;infotainment_type&quot;));</span>
+<span class="fc" id="L117">			data.setUpholstery_type(rs.getString(&quot;upholstery_type&quot;));</span>
+<span class="fc" id="L118">			data.setWheel_type(rs.getString(&quot;wheel_type&quot;));</span>
+<span class="fc" id="L119">			data.setTrim_name(rs.getString(&quot;trim_name&quot;));</span>
+<span class="fc" id="L120">			data.setHeadlight_type(rs.getString(&quot;headlight_type&quot;));</span>
+<span class="fc" id="L121">			return data;</span>
+
+		};
+<span class="fc" id="L124">		return rowMapper;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

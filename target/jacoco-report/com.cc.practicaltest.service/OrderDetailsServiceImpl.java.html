@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OrderDetailsServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Senior Java Test Template Project</a> &gt; <a href="index.source.html" class="el_package">com.cc.practicaltest.service</a> &gt; <span class="el_source">OrderDetailsServiceImpl.java</span></div><h1>OrderDetailsServiceImpl.java</h1><pre class="source lang-java linenums">package com.cc.practicaltest.service;
+
+import java.sql.Date;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+
+import com.cc.practicaltest.dao.Orderdetaildao;
+import com.cc.practicaltest.model.CutomerDetail;
+import com.cc.practicaltest.model.OrderDetails;
+import com.cc.practicaltest.model.TrimAddonDetails;
+
+@Component
+@Service(&quot;orderServiceImpl&quot;)
+@Transactional
+<span class="fc" id="L26">public class OrderDetailsServiceImpl implements OrderDetailsService {</span>
+
+    @Autowired
+    private Orderdetaildao dao;
+    
+	private Map&lt;String, List&lt;TrimAddonDetails&gt;&gt; trimDetail2;
+	  
+	@Override
+	public List&lt;OrderDetails&gt; findByorderId(long id) throws SQLException {
+		// TODO Auto-generated method stub
+<span class="fc" id="L36">		List&lt;OrderDetails&gt; order_List= dao.getOrderDetails(id);</span>
+		
+<span class="fc" id="L38">		Map&lt;String, List&lt;TrimAddonDetails&gt;&gt; trimDetails =getTrimAddDetailmap();</span>
+		   
+<span class="fc" id="L40">		mapTrimDetails(trimDetails,order_List);</span>
+	
+<span class="fc" id="L42">		return order_List;</span>
+	}
+
+	@Override
+	public CutomerDetail findBycustomerId(long id) throws SQLException {
+		// TODO Auto-generated method stub
+<span class="fc" id="L48">		return dao.getCustomerDetails(id) ;</span>
+	}
+
+	
+	@Override
+	public Map&lt;String, List&lt;TrimAddonDetails&gt;&gt; getTrimAddDetailmap() throws SQLException {
+		
+<span class="fc" id="L55">		List&lt;TrimAddonDetails&gt; trim_List= dao.getTrimAddDetail();</span>
+		
+<span class="fc" id="L57">		Map&lt;String, List&lt;TrimAddonDetails&gt;&gt; trimDetails =  trim_List.stream()</span>
+		        .collect
+<span class="fc" id="L59">	            (Collectors.groupingBy(TrimAddonDetails::getTrim_name));</span>
+		
+<span class="fc" id="L61">		return trimDetails;</span>
+	}
+
+	
+	protected void mapTrimDetails(Map&lt;String, List&lt;TrimAddonDetails&gt;&gt; trimDetail, List&lt;OrderDetails&gt; order_List) {
+<span class="fc" id="L66">		trimDetail2 = trimDetail;</span>
+<span class="pc bpc" id="L67" title="1 of 4 branches missed.">		if (CollectionUtils.isEmpty(trimDetail2)|| CollectionUtils.isEmpty(order_List) ) {</span>
+<span class="fc" id="L68">			return;</span>
+		}else {
+<span class="fc" id="L70">			order_List.forEach(orderobj -&gt; {</span>
+<span class="fc" id="L71">			 List&lt;TrimAddonDetails&gt; trimDetailsList = trimDetail2.get(orderobj.getTrim_name());</span>
+<span class="fc" id="L72">			 TrimAddonDetails latesttrim = Collections.max(trimDetailsList, Comparator.comparing(TrimAddonDetails::getEffective_date));</span>
+<span class="fc" id="L73">			 TrimAddonDetails oldttrim = Collections.min(trimDetailsList, Comparator.comparing(TrimAddonDetails::getEffective_date));</span>
+<span class="fc" id="L74">			 Date order_date = Date.valueOf(LocalDate.parse(orderobj.getOrder_date())); </span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">			 if (order_date.after(latesttrim.getEffective_date())) {</span>
+<span class="fc" id="L76">				 populateTrimDetails(orderobj, latesttrim);</span>
+				  }else {
+<span class="fc" id="L78">					  populateTrimDetails(orderobj, oldttrim);</span>
+			 }
+<span class="fc" id="L80">		});</span>
+		}
+<span class="fc" id="L82">	}</span>
+
+	protected void populateTrimDetails(OrderDetails orderobj, TrimAddonDetails latesttrim) {
+<span class="fc" id="L85">		orderobj.setHeadLight_type(latesttrim.getHeadlight_type());</span>
+<span class="fc" id="L86">		 orderobj.setInfoentainment_type(latesttrim.getInfotainment_type());</span>
+<span class="fc" id="L87">		 orderobj.setTrim_WheelType(latesttrim.getWheel_type());</span>
+<span class="fc" id="L88">		 orderobj.setUpholstery_type(latesttrim.getUpholstery_type());</span>
+<span class="fc" id="L89">	}</span>
+
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReteriveOrderDetailsController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Senior Java Test Template Project</a> &gt; <a href="index.source.html" class="el_package">com.cc.practicaltest.controller</a> &gt; <span class="el_source">ReteriveOrderDetailsController.java</span></div><h1>ReteriveOrderDetailsController.java</h1><pre class="source lang-java linenums">package com.cc.practicaltest.controller;
+
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.cc.practicaltest.model.CutomerDetail;
+import com.cc.practicaltest.model.OrderDetails;
+import com.cc.practicaltest.service.OrderDetailsService;
+
+@RestController
+<span class="fc" id="L21">public class ReteriveOrderDetailsController {</span>
+<span class="fc" id="L22">	final static Logger logger = LoggerFactory.getLogger(ReteriveOrderDetailsController.class);</span>
+	
+	@Autowired
+	OrderDetailsService orderService;
+	
+	
+	/*
+	 * @Autowired public ReteriveOrderDetailsController(OrderDetailsService
+	 * orderService) { this.orderService=orderService; }
+	 */
+
+	@RequestMapping(value = &quot;/orderdetails/{id}&quot;, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity&lt;CutomerDetail&gt; getOrderDetails(@PathVariable(&quot;id&quot;) long id) {
+<span class="fc" id="L35">		logger.error(&quot;Fetching User with id &quot; + id);</span>
+
+<span class="fc" id="L37">		List&lt;OrderDetails&gt; orderList = null;</span>
+<span class="fc" id="L38">		CutomerDetail customerDetailsObj = null;</span>
+		
+		try {
+<span class="fc" id="L41">			customerDetailsObj = orderService.findBycustomerId(id);</span>
+<span class="fc bfc" id="L42" title="All 2 branches covered.">			if (customerDetailsObj != null) {</span>
+<span class="fc" id="L43">				orderList = orderService.findByorderId(id);</span>
+<span class="fc" id="L44">				customerDetailsObj.setOrders(orderList);</span>
+			}
+<span class="nc" id="L46">		} catch (Exception exp  ) {</span>
+			// TODO Auto-generated catch block
+<span class="nc" id="L48">			logger.error(&quot;SQLException occured--&gt;&quot; + exp.getMessage());</span>
+<span class="nc" id="L49">			return new ResponseEntity&lt;CutomerDetail&gt;(customerDetailsObj,HttpStatus.INTERNAL_SERVER_ERROR);</span>
+<span class="fc" id="L50">		} </span>
+		
+<span class="fc bfc" id="L52" title="All 2 branches covered.">		if (customerDetailsObj == null) {</span>
+<span class="fc" id="L53">			logger.error(&quot;Order with id &quot; + id + &quot; not found&quot;);</span>
+<span class="fc" id="L54">			return new ResponseEntity&lt;CutomerDetail&gt;(customerDetailsObj,HttpStatus.NOT_FOUND);</span>
+		}
+<span class="fc" id="L56">		return new ResponseEntity&lt;CutomerDetail&gt;(customerDetailsObj, HttpStatus.OK);</span>
+	}
+	
+	
+	@RequestMapping(value = {&quot;/&quot;,&quot;/orderdetails/&quot;}, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity&lt;String&gt; doHandle() {
+<span class="fc" id="L62">		String error_message= &quot;Requested URL is Not Found&quot;;</span>
+<span class="fc" id="L63">		return new ResponseEntity&lt;String&gt;(error_message, HttpStatus.NOT_FOUND);</span>
+	}
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
