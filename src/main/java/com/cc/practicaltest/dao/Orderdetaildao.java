@@ -9,10 +9,10 @@ import com.cc.practicaltest.model.TrimAddonDetails;
 
 public interface Orderdetaildao {
 
-	CutomerDetail getCustomerDetails(long custId) throws SQLException;
+	public CutomerDetail getCustomerDetails(long custId) throws SQLException;
 
-	List<OrderDetails> getOrderDetails(long custId) throws SQLException;
+	public List<OrderDetails> getOrderDetails(long custId) throws SQLException;
 
-	List<TrimAddonDetails> getTrimAddDetail() throws SQLException;
+	public List<TrimAddonDetails> getTrimAddDetail() throws SQLException;
 
 }

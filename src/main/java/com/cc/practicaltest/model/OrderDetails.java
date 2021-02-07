@@ -13,7 +13,6 @@ public class OrderDetails {
 	private String trim_WheelType;
 	private String infoentainment_type;
 	private String headLight_type;
-	private String trim_additional_cost;
 	private String engine_model;
 	private String engine_capacity;
 	private String vechile_fuelType;
@@ -98,12 +97,6 @@ public class OrderDetails {
 	}
 	public void setHeadLight_type(String headLight_type) {
 		this.headLight_type = headLight_type;
-	}
-	public String getTrim_additional_cost() {
-		return trim_additional_cost;
-	}
-	public void setTrim_additional_cost(String trim_additional_cost) {
-		this.trim_additional_cost = trim_additional_cost;
 	}
 	public String getEngine_model() {
 		return engine_model;
